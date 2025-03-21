@@ -1,7 +1,7 @@
 To start the project:
 
 First, open and activate your database. Then, go to the Laravel project's console and run the following command to execute the migration:
-php artisan migrate
+php artisan migrate:fresh
 
 Start the project by running:
 php artisan serve
