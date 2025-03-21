@@ -1,0 +1,1 @@
+<article class="mini-post">{{$slot}}</article>
