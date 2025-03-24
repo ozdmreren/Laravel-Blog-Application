@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use App\Models\Comment;
+use App\Models\Notify;
 use App\Models\SavedBlog;
 use App\Models\User;
 use Hash;
@@ -14,14 +15,38 @@ class UserController extends Controller
 {
     public function add_comment(Blog $blog){
 
-        Comment::create([
+        $comment = Comment::create([
             'user_id'=>auth()->user()->id,
             'blog_id'=>$blog->id,
             'comment'=>request('comment')
         ]);
 
+        $this->notify($blog,$comment);
+
         return redirect('/blogs/'.$blog->id);
     } 
+
+    public function read_comment(Notify $notify){
+        $notify->update([
+            'seen'=>1
+        ]);
+
+        return redirect()->back();
+    }
+
+    private function notify(Blog $blog,Comment $comment){
+
+        if($blog->user->id != $comment->user_id){
+            Notify::create([
+                'blog_id'=>$blog->id,
+                'sender_id'=>auth()->user()->id,
+                'receiver_id'=>$blog->user->id,
+                'comment_id'=>$comment->id,
+                'seen'=>false
+            ]);
+        }
+
+    }
 
     public function saveBlog(Blog $blog){
         $isExist = auth()->user()->savedBlogs()->where('blog_id',$blog->id)->exists();

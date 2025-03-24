@@ -156,7 +156,6 @@
           delete_btn.addEventListener('click',delpop)
         }
         
-
         let cancel_btn = document.getElementById('cancel-btn')
         cancel_btn.addEventListener('click',delpop)
 

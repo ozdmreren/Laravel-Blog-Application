@@ -20,4 +20,8 @@ class Comment extends Model
         return $this->belongsTo(Blog::class);
     }
 
+    public function notify(){
+        return $this->belongsTo(Notify::class);
+    }
+
 }

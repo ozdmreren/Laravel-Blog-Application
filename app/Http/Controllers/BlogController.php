@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Notify;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -10,7 +11,9 @@ class BlogController extends Controller
 {
     public function home(){
         $blogs = Blog::with(['user','comments'])->paginate(4);
+        $notifies = Notify::all();
 
+        //dd(auth()->user()->notifies);
         return view('home',[
             'blogs'=>$blogs
         ]);
@@ -18,6 +21,12 @@ class BlogController extends Controller
 
     public function write(){
         return view('blogs.blog-create');
+    }
+
+    public function search(Request $request){
+        $query = $request->input('q');
+        $blogs = Blog::where('blog_title', 'LIKE', "%{$query}%")->get(['id','blog_title']);
+        return response()->json($blogs);
     }
     
     public function store(){
@@ -64,9 +73,8 @@ class BlogController extends Controller
 
         $blog->update([
             'blog_title'=>request('blog_title'),
-            'blog_image'=>"sea",
+            'blog_image'=>request()->file('blog_image')->getClientOriginalName(),
             'blog_content'=>request('blog_content'),
-            'blog_saved_count'=>$blog->blog_saved_count
         ]);
 
         return redirect('/blogs/'.$blog->id);
@@ -77,4 +85,5 @@ class BlogController extends Controller
 
         return redirect('/');
     }
+
 }

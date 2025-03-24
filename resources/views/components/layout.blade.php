@@ -18,13 +18,16 @@
                     <a href="/">Yazi Mi Yazsam</a>
                 </h1>
 
-                <!-- Search Bar -->
-                <div class="relative w-1/2">
-                    <input type="text" placeholder="Search..."
+                <div class="relative w-96 mx-auto mt-5">
+                    <input type="text" id="searchInput" placeholder="Search..."
                         class="w-full px-5 py-2 border rounded-full focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                
                     <button class="absolute right-4 top-2 text-gray-400 hover:text-blue-500 transition">
                         🔍
                     </button>
+                
+                    <!-- Sonuçları gösteren liste -->
+                    <ul id="results" class="absolute w-full bg-white border rounded-lg shadow-md hidden mt-1"></ul>
                 </div>
 
                 <!-- Right Section -->
@@ -35,12 +38,32 @@
                         <!-- Bildirim Butonu -->
                         <button id="notificationButton" class="relative text-gray-600 shadow-lg hover:bg-gray-100 transition duration-300 px-3 py-2 rounded-full">
                             🔔
+                            <span class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 p-1 w-5 h-5 flex items-center justify-center text-xs font-bold text-white bg-red-500 rounded-full">
+                                {{auth()->user()->notifies->where('seen',0)->count()}}
+                            </span>
                         </button>
+                        
                 
                         <!-- Bildirim Menüsü -->
-                        <div id="notificationMenu" class="hidden absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-3">
+                        <div id="notificationMenu" class="hidden absolute right-0 mt-2 w-96 bg-white shadow-lg rounded-lg p-3">
                             <ul id="notificationList">
                                 <!-- Mesajlar buraya eklenecek -->
+                                @foreach (auth()->user()->notifies as $notify )
+                                <li class="py-2 mb-3 flex justify-between items-center hover:bg-gray-100 px-2 transition cursor-pointer notify-item" data-form-id="notify-{{ $notify->id }}">
+                                    @if ($notify->seen == 0)
+                                        <span class="text-xs text-red-500 font-semibold">New</span>
+                                    @endif
+                                    <form action="/notifies/{{$notify->id}}" method="POST" class="hidden" id="notify-{{ $notify->id }}">
+                                        @csrf
+                                        @method('PATCH')
+                                    </form>
+                                    <p class="text-sm"><strong>{{$notify->blog->blog_title}}</strong></p>
+                                    <span>{{$notify->comment->user->first_name}}: {{Str::limit($notify->comment->comment, 35)}}</span>
+                                    <div class="w-12">
+                                        <img src="{{asset('upload/'.$notify->blog->blog_image)}}" alt="">
+                                    </div>
+                                </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -159,49 +182,26 @@
         });
     });
 
-
-    // NOTIF ICIN
-    document.addEventListener("DOMContentLoaded", function () {
-            const notificationButton = document.getElementById("notificationButton");
-            const notificationMenu = document.getElementById("notificationMenu");
-            const notificationList = document.getElementById("notificationList");
-
-            // Bildirim verileri (Dinamik olarak eklenebilir)
-            const messages = [
-                { text: "New message from Alice", isNew: true },
-                { text: "Reminder: Meeting at 3 PM", isNew: true },
-                { text: "John replied to your comment", isNew: false }
-            ];
-
-            // Bildirimleri listeye ekle
-            function loadNotifications() {
-                notificationList.innerHTML = ""; // Önce temizle
-                messages.forEach(msg => {
-                    const li = document.createElement("li");
-                    li.classList.add("py-2", "border-b", "border-gray-200", "flex", "justify-between",'hover:bg-gray-100','px-2','transition','cursor-default');
-
-                    li.innerHTML = `
-                        <span>${msg.text}</span>
-                        ${msg.isNew ? '<span class="text-xs text-red-500 font-semibold">Yeni</span>' : ''}
-                    `;
-
-                    notificationList.appendChild(li);
-                });
-            }
-
-            // Butona tıklanınca menüyü aç/kapat
-            notificationButton.addEventListener("click", function () {
-                notificationMenu.classList.toggle("hidden");
-                loadNotifications();
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.notify-item').forEach(item => {
+            item.addEventListener('click', function () {
+                let formId = this.getAttribute('data-form-id');
+                document.getElementById(formId).submit();
             });
+        });
+    });
 
+    notificationButton.addEventListener("click", function () {
+                notificationMenu.classList.toggle("hidden");
+            })
             // Menü dışına tıklanınca kapat
             document.addEventListener("click", function (event) {
                 if (!notificationButton.contains(event.target) && !notificationMenu.contains(event.target)) {
                     notificationMenu.classList.add("hidden");
                 }
             });
-        });
+
+
 
         //SIGN OUT'A BASTIĞIMDA ÇIKACAK OLAN KUTUCUK
         const signOutButton = document.getElementById("signOutButton");
@@ -229,6 +229,56 @@
         if (event.target === signOutModal) {
             signOutModal.classList.add("hidden");
         }
+    });
+
+
+    //SEARCHBAR
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const resultsContainer = document.getElementById('results');
+
+        searchInput.addEventListener('input', function () {
+            const query = searchInput.value.trim();
+
+            if (query.length === 0) {
+                resultsContainer.classList.add('hidden');
+                return;
+            }
+
+            fetch(`/search?q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    resultsContainer.innerHTML = '';
+
+                    if (data.length === 0) {
+                        resultsContainer.innerHTML = '<li class="p-2 text-gray-500">No results found</li>';
+                    } else {
+                        data.forEach(blog => {
+                            const li = document.createElement('li');
+                            li.textContent = blog.blog_title;
+                            li.classList.add('p-2', 'hover:bg-gray-100', 'cursor-pointer', 'border-b');
+
+                            // Tıklanınca ilgili blog sayfasına git
+                            li.addEventListener('click', function () {
+                                window.location.href = `/blogs/${blog.id}`;
+                            });
+
+                            resultsContainer.appendChild(li);
+                        });
+                    }
+
+                    resultsContainer.classList.remove('hidden');
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        // Input dışına tıklanınca listeyi gizle
+        document.addEventListener('click', function (event) {
+            if (!searchInput.contains(event.target) && !resultsContainer.contains(event.target)) {
+                resultsContainer.classList.add('hidden');
+            }
+        });
     });
     </script>
 </body>

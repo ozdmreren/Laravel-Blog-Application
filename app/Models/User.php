@@ -56,4 +56,8 @@ class User extends Authenticatable
     public function savedBlogs(){
         return $this->belongsToMany(Blog::class,'saved_blogs')->withTimestamps();
     }
+
+    public function notifies(){
+        return $this->hasMany(Notify::class,'receiver_id');
+    }
 }

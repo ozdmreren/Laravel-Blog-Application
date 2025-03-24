@@ -27,7 +27,7 @@
 
                 <div>
                     <label for="email" class="block text-sm">Email</label>
-                    <input type="email" id="email" name="email" required class="w-full p-3 rounded bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    <input type="email" id="email" name="email" required class="w-full p-3 rounded bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-gray-500" value="{{old('email')}}">
                 </div>
                 <div>
                     <label for="password" class="block text-sm">Password</label>

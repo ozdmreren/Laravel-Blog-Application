@@ -126,7 +126,7 @@ document.getElementById("decrease-font").addEventListener('click',function(){
 
      setTimeout(function(){
         blog_form.submit()
-     },3000)
+     },2000)
 
  })
 
@@ -136,7 +136,7 @@ document.getElementById("decrease-font").addEventListener('click',function(){
      scroll(0,0)
      setTimeout(function(){
         toast.classList.add('hidden')
-     },3000)
+     },2000)
  }
 
 
