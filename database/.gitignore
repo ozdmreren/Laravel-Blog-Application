@@ -1,1 +1,2 @@
 *.sqlite*
+echo "public/upload/CV_Image.jpg" >> .gitignore

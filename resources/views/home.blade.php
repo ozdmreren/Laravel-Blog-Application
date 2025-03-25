@@ -25,7 +25,7 @@
 							</a>
 						</div>
 					</header>
-					<a href="/blogs/{{$blog->id}}" class="block">
+					<a href="{{route('blog.show',[$blog->id])}}" class="block">
 						<img src="{{asset('upload/'.$blog->blog_image)}}" alt="" class="w-full h-64 object-cover rounded-lg">
 					</a>
 					<p class="text-gray-700 mt-4 break-words">{{textclip($blog->blog_content)}}</p>

@@ -1,5 +1,5 @@
 <x-layout>
-  <form class="relative" id="blog_form" method="POST" action="/" enctype="multipart/form-data">
+  <form class="relative" id="blog_form" method="POST" action="{{route('blog.store')}}" enctype="multipart/form-data">
     @csrf
     <x-form-field >
       <div class="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-10">

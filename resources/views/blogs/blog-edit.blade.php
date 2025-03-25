@@ -1,5 +1,5 @@
 <x-layout>
-    <form class="relative" id="blog_form" method="POST" action="/blogs/{{$blog->id}}" enctype="multipart/form-data">
+    <form class="relative" id="blog_form" method="POST" action="{{route('blog.update',[$blog->id])}}" enctype="multipart/form-data">
       @csrf
       @method('PATCH')
       <x-form-field >

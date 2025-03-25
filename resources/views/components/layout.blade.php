@@ -1,3 +1,7 @@
+@php
+    $current = currentUser();
+@endphp
+
 <!DOCTYPE HTML>
 <html lang="tr">
 <head>
@@ -15,7 +19,7 @@
                 
                 <!-- Logo -->
                 <h1 class="text-2xl font-bold text-blue-600 px-4 py-2 rounded-lg border-2 border-white hover:border-gray-200 transition duration-300 hover:shadow-lg hover:text-blue-700">
-                    <a href="/">Yazi Mi Yazsam</a>
+                    <a href="{{route('home')}}">Yazi Mi Yazsam</a>
                 </h1>
 
                 <div class="relative w-96 mx-auto mt-5">
@@ -32,14 +36,14 @@
 
                 <!-- Right Section -->
                 <div class="flex items-center space-x-6">
-                    <a href="{{url('blogs/write')}}" class="px-6 py-2 text-black font-bold bg-gray-100 opacity-70 hover:bg-gray-300 hover:opacity-100 transition duration-500 rounded-full shadow-lg">Write</a>
+                    <a href="{{route('blog.write')}}" class="px-6 py-2 text-black font-bold bg-gray-100 opacity-70 hover:bg-gray-300 hover:opacity-100 transition duration-500 rounded-full shadow-lg">Write</a>
                     @auth
                     <div class="relative">
                         <!-- Bildirim Butonu -->
                         <button id="notificationButton" class="relative text-gray-600 shadow-lg hover:bg-gray-100 transition duration-300 px-3 py-2 rounded-full">
                             🔔
                             <span class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 p-1 w-5 h-5 flex items-center justify-center text-xs font-bold text-white bg-red-500 rounded-full">
-                                {{auth()->user()->notifies->where('seen',0)->count()}}
+                                {{$current->notifies->where('seen',0)->count()}}
                             </span>
                         </button>
                         
@@ -48,7 +52,7 @@
                         <div id="notificationMenu" class="hidden absolute right-0 mt-2 w-96 bg-white shadow-lg rounded-lg p-3">
                             <ul id="notificationList">
                                 <!-- Mesajlar buraya eklenecek -->
-                                @foreach (auth()->user()->notifies as $notify )
+                                @foreach ($current->notifies as $notify )
                                 <li class="py-2 mb-3 flex justify-between items-center hover:bg-gray-100 px-2 transition cursor-pointer notify-item" data-form-id="notify-{{ $notify->id }}">
                                     @if ($notify->seen == 0)
                                         <span class="text-xs text-red-500 font-semibold">New</span>
@@ -73,14 +77,14 @@
                     <div class="relative">
                         <button id="avatar-btn" class="focus:outline-none">
                             @php
-                                if(auth()->user()){
+                                if($current){
                                     $isExist = true;
                                 }
                                 else{
                                     $isExist = false;
                                 }
                             @endphp
-                            <img src="{{$isExist ? asset('upload/'.auth()->user()->avatar) : asset('upload/logo.jpg')}}" alt="Avatar" class="w-10 h-10 rounded-full">
+                            <img src="{{$isExist ? asset('upload/'.$current->avatar) : asset('upload/logo.jpg')}}" alt="Avatar" class="w-10 h-10 rounded-full">
                         </button>
                         
                         <!-- Dropdown Menu -->

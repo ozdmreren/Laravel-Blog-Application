@@ -100,7 +100,7 @@
                    </button>
                    
 
-                      <a href="/blogs/{{$blog->id}}/edit" 
+                      <a href="{{route('blog.edit',[$blog->id])}}" 
                         class="inline-block px-6 py-2 text-white bg-gradient-to-r from-blue-500 to-blue-700 rounded-lg shadow-lg border border-blue-800 hover:from-blue-600 hover:to-blue-800 hover:shadow-xl transition duration-300 ease-in-out transform hover:scale-105">
                         ✏️ Edit Blog
                      </a>
@@ -135,7 +135,7 @@
                   </div>
                 </div>
               </div>
-              <form action="/blogs/{{$blog->id}}" method="POST">
+              <form action="{{route('blog.delete',[$blog->id])}}" method="POST">
                 @csrf
                 @method('DELETE')
 

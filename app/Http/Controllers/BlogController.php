@@ -31,7 +31,6 @@ class BlogController extends Controller
     
     public function store(){
 
-
          request()->validate([
              'blog_title'=>['required','min:10'],
              'sub_blog_title'=>['required','max:60','min:20'],
