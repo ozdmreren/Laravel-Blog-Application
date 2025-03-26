@@ -18,10 +18,10 @@ return new class extends Migration
     {
         Schema::create('notifies', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Blog::class);
+            $table->foreignIdFor(Blog::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class,'sender_id');
             $table->foreignIdFor(User::class,'receiver_id');
-            $table->foreignIdFor(Comment::class);
+            $table->foreignIdFor(Comment::class)->constrained()->cascadeOnDelete();
             $table->boolean('seen');
             $table->timestamps();
         });

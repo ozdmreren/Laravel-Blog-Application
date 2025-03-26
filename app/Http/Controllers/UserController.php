@@ -31,7 +31,7 @@ class UserController extends Controller
             'seen'=>1
         ]);
 
-        return redirect()->back();
+        return redirect()->route('blog',[$notify->blog->id]);
     }
 
     private function notify(Blog $blog,Comment $comment){

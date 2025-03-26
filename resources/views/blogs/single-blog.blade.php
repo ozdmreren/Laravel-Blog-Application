@@ -135,7 +135,7 @@
                   </div>
                 </div>
               </div>
-              <form action="{{route('blog.delete',[$blog->id])}}" method="POST">
+              <form action="{{route('blog',[$blog->id])}}" method="POST">
                 @csrf
                 @method('DELETE')
 

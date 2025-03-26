@@ -36,7 +36,7 @@
 
                 <!-- Right Section -->
                 <div class="flex items-center space-x-6">
-                    <a href="{{route('blog.write')}}" class="px-6 py-2 text-black font-bold bg-gray-100 opacity-70 hover:bg-gray-300 hover:opacity-100 transition duration-500 rounded-full shadow-lg">Write</a>
+                    <a href="{{route('write')}}" class="px-6 py-2 text-black font-bold bg-gray-100 opacity-70 hover:bg-gray-300 hover:opacity-100 transition duration-500 rounded-full shadow-lg">Write</a>
                     @auth
                     <div class="relative">
                         <!-- Bildirim Butonu -->
@@ -92,9 +92,9 @@
                             <ul class="text-gray-700 text-sm">
                                 @auth
                                     
-                                <li><a href="/profile/{{auth()->id()}}" class="block px-4 py-2 hover:bg-gray-100">Profile</a></li>
-                                <li><a href="/users/{{auth()->id()}}/library" class="block px-4 py-2 hover:bg-gray-100">Library</a></li>
-                                <li><a href="{{url('/users/'.auth()->user()->id.'/stories')}}" class="block px-4 py-2 hover:bg-gray-100">Stories</a></li>
+                                <li><a href="{{route('dashboard',[$current->id])}}" class="block px-4 py-2 hover:bg-gray-100">Profile</a></li>
+                                <li><a href="{{route('user.library',[$current->id])}}" class="block px-4 py-2 hover:bg-gray-100">Library</a></li>
+                                <li><a href="{{route('user.stories',[$current->id])}}" class="block px-4 py-2 hover:bg-gray-100">Stories</a></li>
                                 <hr>
                                 <li>
                                     <button id="settings-button" class="block w-full text-left px-4 py-2 hover:bg-gray-100">
@@ -103,23 +103,23 @@
                                 </li>
                                 <div id="settings-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden border">
                                     <ul class="text-gray-700 text-sm">
-                                        <li><a href="/profile/{{auth()->id()}}/edit" class="block px-4 py-2 hover:bg-gray-100">Edit Profile</a></li>
-                                        <li><a href="/profile/{{auth()->id()}}/security" class="block px-4 py-2 hover:bg-gray-100">Password & Security</a></li>
+                                        <li><a href="{{route('profile.edit',[$current->id])}}" class="block px-4 py-2 hover:bg-gray-100">Edit Profile</a></li>
+                                        <li><a href="{{route('profile.security',[$current->id])}}" class="block px-4 py-2 hover:bg-gray-100">Password & Security</a></li>
                                     </ul>
                                 </div>
                                 <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">Help</a></li>
                                 <hr>
                                 @endauth
                                 @guest
-                                <li><a href="/register" class="block px-4 py-2 text-black font-bold  hover:bg-gray-100">Sign Up</a></li>
-                                <li><a href="/login" class="block px-4 py-2 text-black font-bold hover:bg-gray-100">Sign In</a></li>    
+                                <li><a href="{{route('register')}}" class="block px-4 py-2 text-black font-bold  hover:bg-gray-100">Sign Up</a></li>
+                                <li><a href="{{route('login')}}" class="block px-4 py-2 text-black font-bold hover:bg-gray-100">Sign In</a></li>    
                                 @endguest
                                 
                                 @auth
-                                <form action="/logout" method="POST">
+                                <form action="{{route('logout')}}" method="POST">
                                     @csrf
                                     <li>
-                                        <p id="signOutButton" class="text-left w-full px-4 py-2 text-red-600 hover:bg-gray-100">
+                                        <p id="signOutButton" class="text-left w-full px-4 py-2 text-red-600 hover:bg-gray-100 select-none">
                                             Sign Out
                                         </p>
                                     </li>
@@ -132,13 +132,13 @@
                                                 <button id="confirmSignOut" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
                                                     Yes
                                                 </button>
-                                                <button id="cancelSignOut" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
+                                                <p id="cancelSignOut" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
                                                     No
-                                                </button>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
-                                    <li class="px-4 py-2 text-xs text-gray-500">{{auth()->user()->email}}</li>
+                                    <li class="px-4 py-2 text-xs text-gray-500">{{$current->email}}</li>
                                 </form>    
                                 @endauth
                                 

@@ -76,7 +76,7 @@ class BlogController extends Controller
             'blog_content'=>request('blog_content'),
         ]);
 
-        return redirect('/blogs/'.$blog->id);
+        return redirect()->route('blog',[$blog->id]);
     }
 
     public function delete(Blog $blog){

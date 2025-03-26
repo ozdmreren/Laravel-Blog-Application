@@ -10,7 +10,7 @@
                 <!-- Blog Metni -->
                 <div class="w-2/3">
                     <h3 class="text-lg font-semibold text-gray-800">
-                        <a href="/blogs/{{$blog->id}}" class="hover:text-blue-500 transition">
+                        <a href="{{route('blog',$blog->id)}}" class="hover:text-blue-500 transition">
                             {{$blog->blog_title}}
                         </a>
                     </h3>

@@ -18,11 +18,11 @@
             <ul class="mt-2 space-y-4">
                 @foreach($user->blogs as $blog)
                 <li class="p-4 bg-gray-100 rounded-lg shadow flex items-center space-x-4">
-                    <img class="w-24 h-24 object-cover rounded" src="{{asset('images/pic05.jpg') }}" alt="{{ $blog->blog_title }}">
+                    <img class="w-24 h-24 object-cover rounded" src="{{asset('upload/'.$blog->blog_image) }}" alt="{{ $blog->blog_title }}">
                     <div class="break-words">
-                        <h4 class="text-lg font-bold"> <a class="hover:text-blue-500" href="/blogs/{{$blog->id}}">{{ $blog->blog_title }}</a></h4>
+                        <h4 class="text-lg font-bold"> <a class="hover:text-blue-500" href="{{route('blog',[$blog->id])}}">{{ $blog->blog_title }}</a></h4>
                         <p class="text-gray-600 break-words">{{ Str::limit($blog->blog_content,70 ) }}</p>
-                        <a href="/blogs/{{$blog->id}}" class="text-blue-500">Read more</a>
+                        <a href="{{route('blog',[$blog->id])}}" class="text-blue-500">Read more</a>
                     </div>
                 </li>
                     

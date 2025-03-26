@@ -18,18 +18,18 @@ Route::controller(BlogController::class)
 ->middleware('auth')
 ->prefix('/blogs')
 ->group(function(){
-    Route::get('/write','write')->name('blog.write');
+    Route::get('/write','write')->name('write');
     Route::get('/{blog}/edit','edit')->can('edit','blog')->name('blog.edit');
-    Route::patch('/{blog}','update')->can('edit','blog')->name('blog.update');
-    Route::delete('/{blog}','delete')->can('edit','blog')->name('blog.delete');
-    Route::get('/{blog}','show')->name('blog.show'); // çakışan rotolar var /write ile
+    Route::get('/{blog}','show')->name('blog'); // çakışan rotolar var /write ile
+    Route::patch('/{blog}','update')->can('edit','blog');
+    Route::delete('/{blog}','delete')->can('edit','blog');
 });
-
+// routelere name ekliyordun
 Route::controller(UserController::class)
 ->middleware('auth')
 ->group(function(){
-    Route::get('/users/{user}/library','showLib')->can('validate','user')->name('users.library');
-    Route::get('/users/{user}/stories','showStories')->can('validate','user');
+    Route::get('/users/{user}/library','showLib')->can('validate','user')->name('user.library');
+    Route::get('/users/{user}/stories','showStories')->can('validate','user')->name('user.stories');
     Route::post('/blogs/{blog}','add_comment');
     Route::patch('/notifies/{notify}','read_comment');
     // buna da can eklersi
@@ -41,9 +41,9 @@ Route::controller(UserController::class)
 ->middleware('auth')
 ->prefix('/profile')
 ->group(function(){
-    Route::get('/{user}','dashboard');
-    Route::get('/{user}/edit','editProfile')->can('validate','user');
-    Route::get('/{user}/security','editSecurity')->can('validate','user');
+    Route::get('/{user}','dashboard')->name('dashboard');
+    Route::get('/{user}/edit','editProfile')->can('validate','user')->name('profile.edit');
+    Route::get('/{user}/security','editSecurity')->can('validate','user')->name('profile.security');
     Route::patch('/{user}/edit','updateProfile')->can('validate','user');
     Route::patch('/{user}/security/email','updateSecurityEmail')->can('validate','user');
     Route::patch('/{user}/security/password','updateSecurityPassword')->can('validate','user');
@@ -53,7 +53,7 @@ Route::controller(UserController::class)
 Route::controller(RegisterUserController::class)
 ->prefix('/register')
 ->group(function(){
-    Route::get('/','create');
+    Route::get('/','create')->name('register');
     Route::post('/','store');
 });
 
@@ -61,7 +61,7 @@ Route::controller(SessionController::class)
 ->group(function(){
     Route::get('/login','create')->name('login');
     Route::post('/login','store');
-    Route::post('/logout','destroy');
+    Route::post('/logout','destroy')->name('logout');
 });
 
 
