@@ -4,6 +4,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
+use App\Mail\BlogPosted;
 use Illuminate\Support\Facades\Route;
 
 

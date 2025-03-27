@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\BlogPosted;
 use App\Models\Blog;
 use App\Models\Notify;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Mail;
 
 class BlogController extends Controller
 {
@@ -47,6 +49,10 @@ class BlogController extends Controller
              'blog_content'=> request('blog_content'),
              'user_id'=>auth()->user()->id
          ]);
+
+         Mail::to(currentUser()->email)->send(
+            new BlogPosted($blog)
+         );
 
          return redirect('/',)->with('success','The blog successfully created !');
     }
